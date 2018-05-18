@@ -60,7 +60,7 @@ public class RetrofitCache {
         } else {
             return Observable.concat(fromCache, fromNetwork).filter(new Predicate<T>() {
                 @Override
-                public boolean test(T t) throws Exception {
+                public boolean test(T t){
                     return t!=null;
                 }
             });

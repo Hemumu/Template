@@ -3,6 +3,7 @@ package com.helin.template.utils.network;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.util.Log;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -27,6 +28,7 @@ public  abstract class ProgressSubscriber <T> implements ProgressCancelListener,
      * 显示Dialog
      */
     public void showProgressDialog(){
+        Log.e("***","show pro");
         if (dialogHandler != null) {
             dialogHandler.show();
         }

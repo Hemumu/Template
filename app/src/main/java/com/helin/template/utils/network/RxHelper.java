@@ -69,7 +69,6 @@ public class RxHelper {
 
                 }).takeUntil(compareLifecycleObservable).subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread()).observeOn(AndroidSchedulers.mainThread());
             }
-
         };
     }
 
