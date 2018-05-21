@@ -19,7 +19,11 @@ public abstract class DataCallback<T> implements Observer<T> {
 
     @Override
     public void onNext(T t) {
-        onResponse(t);
+        try {
+            onResponse(parseNetworkResponse((String) t));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -41,6 +45,8 @@ public abstract class DataCallback<T> implements Observer<T> {
     public abstract void onErrors( Throwable e);
 
     public abstract void onResponse(T response);
+
+    public abstract T parseNetworkResponse(String response) throws Exception;
 
 
 }

@@ -6,7 +6,6 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
@@ -45,10 +44,10 @@ public class RxHelper {
      * @param <T>
      * @return
      */
-    public static <T> ObservableTransformer<BaseEntity<T>, T> handleResult(final ActivityLifeCycleEvent event, final PublishSubject<ActivityLifeCycleEvent> lifecycleSubject) {
-        return new ObservableTransformer<BaseEntity<T>, T>() {
+    public static <T> ObservableTransformer<String, T> handleResult(final ActivityLifeCycleEvent event, final PublishSubject<ActivityLifeCycleEvent> lifecycleSubject) {
+        return new ObservableTransformer<String, T>() {
             @Override
-            public ObservableSource<T> apply(Observable<BaseEntity<T>> observable) {
+            public ObservableSource<T> apply(Observable<String> observable) {
 
                 Observable<ActivityLifeCycleEvent> compareLifecycleObservable =
                         lifecycleSubject.filter(new Predicate<ActivityLifeCycleEvent>() {
@@ -57,17 +56,31 @@ public class RxHelper {
                                 return activityLifeCycleEvent.equals(event);
                             }
                         });
-                return observable.flatMap(new Function<BaseEntity<T>, Observable<T>>() {
-                    @Override
-                    public Observable<T> apply(BaseEntity<T> tBaseEntity)  {
-                        if (tBaseEntity.getCode() == 200) {
-                            return createData(tBaseEntity.getData());
-                        } else {
-                            return Observable.error(new ApiException(tBaseEntity.getCode()));
-                        }
-                    }
-
-                }).takeUntil(compareLifecycleObservable).subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread()).observeOn(AndroidSchedulers.mainThread());
+                return (ObservableSource<T>) observable.takeUntil(compareLifecycleObservable).subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread()).observeOn(AndroidSchedulers.mainThread());
+//                return observable.flatMap(new Function<String, Observable<T>>() {
+//                    @Override
+//                    public Observable<T> apply(final String tBaseEntity)  {
+//
+//                        return Observable.create(new ObservableOnSubscribe<T>() {
+//                            @Override
+//                            public void subscribe(ObservableEmitter<T> observableEmitter) throws Exception {
+//                                try {
+//                                    observableEmitter.onNext((T) tBaseEntity);
+//                                    observableEmitter.onComplete();
+//                                } catch (Exception e) {
+//                                    observableEmitter.onError(e);
+//                                }
+//                            }
+//                        });
+//
+////                        if (tBaseEntity.getCode() == 200) {
+////                            return createData(tBaseEntity.getData());
+////                        } else {
+////                            return Observable.error(new ApiException(tBaseEntity.getCode()));
+////                        }
+//                    }
+//
+//                }).takeUntil(compareLifecycleObservable).subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread()).observeOn(AndroidSchedulers.mainThread());
             }
         };
     }

@@ -39,51 +39,32 @@ public class HttpUtil {
      * @param event Activity 生命周期
      * @param lifecycleSubject
      */
-    public void toSubscribe(Observable ob, final DataCallback subscriber, final ActivityLifeCycleEvent event, final PublishSubject<ActivityLifeCycleEvent> lifecycleSubject) {
+    public void toSubscribe(Observable ob, final ActivityLifeCycleEvent event, final PublishSubject<ActivityLifeCycleEvent> lifecycleSubject, final DataCallback subscriber) {
         //数据预处理
-        ObservableTransformer<BaseEntity<Object>, Object> result = RxHelper.handleResult(event, lifecycleSubject);
+        ObservableTransformer<String, Object> result = RxHelper.handleResult(event, lifecycleSubject);
         Observable observable = ob.compose(result);
         //不需要缓存
         observable.subscribe(subscriber);
         //缓存
 //        RetrofitCache.load(cacheKey, observable, isSave, forceRefresh).subscribe(subscriber);
     }
-
-
-
-
-    public void toSubscribeTemp(Observable ob, final DataCallback subscriber, final ActivityLifeCycleEvent event, final PublishSubject<ActivityLifeCycleEvent> lifecycleSubject) {
-        //数据预处理
-        ObservableTransformer<BaseEntity<Object>, Object> result = RxHelper.handleResult(event, lifecycleSubject);
-        Observable observable = ob.compose(result);
-//                .doOnSubscribe(new Consumer() {
-//                    @Override
-//                    public void accept(Object o) throws Exception {
-//                        subscriber.showProgressDialog();
-//                    }
-//                });
-        //不需要缓存
-        observable.subscribe(subscriber);
-        //缓存
-//        RetrofitCache.load(cacheKey, observable, isSave, forceRefresh).subscribe(subscriber);
-    }
-
 
 
     public void doGet(PublishSubject<ActivityLifeCycleEvent> lifecycleSubject, Context context){
-
         Observable ob = Api.getDefault().getAppConfig("127", "sbys");
-        HttpUtil.getInstance().toSubscribe(ob, new DataCallback<AppConfigBean>() {
+        Observable ob2 = Api.getDefault().getVideo("0","1");
 
+        HttpUtil.getInstance().toSubscribe(ob2, ActivityLifeCycleEvent.DESTROY, lifecycleSubject, new AppConfigCallBack() {
             @Override
             public void onErrors(Throwable e) {
                 e.printStackTrace();
-            }
-            @Override
-            public void onResponse(AppConfigBean response) {
-                Log.e(TAG,response.getAppName());
+                Log.e(TAG,e.getMessage());
             }
 
-        }, ActivityLifeCycleEvent.PAUSE, lifecycleSubject);
+            @Override
+            public void onResponse(VideoBean response) {
+                Log.e(TAG,response.getData().get(0).getTitle());
+            }
+        });
     }
 }

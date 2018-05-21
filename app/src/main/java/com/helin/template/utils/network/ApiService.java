@@ -9,10 +9,22 @@ import retrofit2.http.Query;
  * create by 2018-05-17
  */
 public interface  ApiService {
+
+    /**
+     * 获取配置信息
+     * @return
+     */
+    @GET("/NewsControl/recommendNews/randomBySection")
+    Observable<String> getVideo(@Query("secId") String secId, @Query("newsId") String newsId);
+
     /**
      * 获取配置信息
      * @return
      */
     @GET("/App_Config/appConfig/getAppCinfig")
-    Observable<BaseEntity<AppConfigBean>> getAppConfig(@Query("siteId") String siteId, @Query("tagName") String tagName);
+    Observable<String> getAppConfig(@Query("siteId") String siteId, @Query("tagName") String tagName);
+
+
+
+
 }
