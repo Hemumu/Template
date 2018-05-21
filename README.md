@@ -1,2 +1,2 @@
 # Templat
-Retrofit2.0+RxJava 网络封装
+Retrofit2.0+RxJava2 网络封装Demo
