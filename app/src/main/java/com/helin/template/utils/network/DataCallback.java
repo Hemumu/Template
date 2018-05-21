@@ -28,11 +28,7 @@ public abstract class DataCallback<T> implements Observer<T> {
 
     @Override
     public void onError(Throwable e) {
-        if (e instanceof ApiException) {
-            onErrors(e);
-        } else {
-            onErrors(e);
-        }
+        onErrors(e);
     }
 
     public  void onBefore(Disposable disposable ){
