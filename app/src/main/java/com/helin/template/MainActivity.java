@@ -14,6 +14,8 @@ import io.reactivex.subjects.PublishSubject;
  */
 public class MainActivity extends AppCompatActivity {
 
+    private String main = "main";
+
     public final PublishSubject<ActivityLifeCycleEvent> lifecycleSubject = PublishSubject.create();
 
     @Override
