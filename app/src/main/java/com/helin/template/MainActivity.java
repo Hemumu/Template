@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     public final PublishSubject<ActivityLifeCycleEvent> lifecycleSubject = PublishSubject.create();
 
-    private String main ="pro";
+    private String main2 ="pro";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
