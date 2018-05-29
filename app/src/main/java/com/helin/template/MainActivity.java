@@ -14,10 +14,11 @@ import io.reactivex.subjects.PublishSubject;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private String main ="pro";
+
 
     public final PublishSubject<ActivityLifeCycleEvent> lifecycleSubject = PublishSubject.create();
 
+    private String main ="pro";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
